@@ -4,46 +4,56 @@ public class Fighter_Animation : MonoBehaviour
 {
     private Animator _animator;
     private static readonly int State = Animator.StringToHash("state");
-    private enum CharacterState {idle, walk, jab, kick, punch, dive_kick}
+    //reference scipts//
     private Fighter_Movement fighter_Movement;
     private Fighter_Attack fighter_Attack;
-    // Start is called before the first frame update
+    private Fighter_DamageHandler fighter_DamageHandler;
+
+    private enum CharacterState
+    {
+        idle,
+        walk,
+        jab,
+        kick,
+        punch,
+        hurt
+    }
     void Start()
     {
         _animator = GetComponent<Animator>();
         fighter_Movement = GetComponent<Fighter_Movement>();
         fighter_Attack = GetComponent<Fighter_Attack>();
+        fighter_DamageHandler = GetComponent<Fighter_DamageHandler>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        CharacterState  state;
-
-        if(fighter_Movement.IsWalking())
+        CharacterState state = DetermineCharacterState();
+        _animator.SetInteger(State, (int)state);
+    }
+    private CharacterState DetermineCharacterState()
+    {
+        if (fighter_DamageHandler.IsHit())
         {
-            state = CharacterState.walk;
+            return CharacterState.hurt;
         }
-        else if(fighter_Attack.IsJabbing())
+        if (fighter_Movement.IsWalking())
         {
-            state = CharacterState.jab;
+            return CharacterState.walk;
         }
-        else if(fighter_Attack.IsKicking())
+        if (fighter_Attack.IsJabbing())
         {
-            state = CharacterState.kick;
+            return CharacterState.jab;
         }
-        else if(fighter_Attack.IsPunching())
+        if (fighter_Attack.IsKicking())
         {
-            state = CharacterState.punch;
+            return CharacterState.kick;
         }
-        else if(fighter_Attack.IsDiveKicking())
+        if (fighter_Attack.IsPunching())
         {
-            state = CharacterState.dive_kick;
+            return CharacterState.punch;
         }
-        else
-        {
-            state = CharacterState.idle;
-        }
-        _animator.SetInteger(State,(int)state);
+        return  CharacterState.idle;
     }
 }

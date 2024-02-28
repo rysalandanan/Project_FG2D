@@ -1,18 +1,65 @@
+using System.Collections;
 using UnityEngine;
 
-public class Fighter_DamageHandler : BaseDamageHandler
+public class Fighter_DamageHandler :MonoBehaviour, IDamageable
 {
-    private const int damageAmount = 10;
-    private  void Update()
+    [Header("General Attributes")]
+    [SerializeField] private int maxHealth;
+    [SerializeField] private float stunDuration;
+
+    [Header("Defeat Screen")]
+    [SerializeField] private GameObject defeatedScreen;
+
+    //Flag//
+    private bool isHit = false;
+    private bool isDead = false;
+
+    //Health//
+    protected int currentHealth;
+
+    private AudioSource hitSFX;
+    private void Start()
     {
-        if(Input.GetKeyDown (KeyCode.G))
+        currentHealth = maxHealth;
+        hitSFX = GetComponent<AudioSource>();
+    }
+    public void TakeDamage(int damageAmount)
+    {
+        hitSFX.Play();
+        currentHealth -= damageAmount;
+        HandleDamageAftermath();
+        Debug.Log(currentHealth);
+    }
+
+    public void GetStun(float stunDuration)
+    {
+        StartCoroutine(Stun(stunDuration));
+    }
+
+    private void HandleDamageAftermath()
+    {
+        GetStun(stunDuration);
+        if (currentHealth <= 0)
         {
-            TakeDamage(damageAmount);
+            isDead = true;
+            defeatedScreen.SetActive(true);
         }
     }
-    protected override void HandleDamagAftermath()
+
+    private IEnumerator Stun(float duration)
     {
-        Debug.Log("Fighter");
-        Debug.Log(currentHealth);
+        isHit = true;
+        yield return new WaitForSeconds(duration);
+        isHit = false;
+    }
+
+    public bool IsHit()
+    {
+        return isHit;
+        // To Communicate with AI_Animation script that this enemy got hit and should play the hit animation//
+    }
+    public bool IsDead()
+    {
+        return isDead;
     }
 }

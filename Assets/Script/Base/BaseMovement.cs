@@ -53,11 +53,11 @@ public abstract class BaseMovement : MonoBehaviour
     {
         if (movementInput.x < 0)
         {
-            sr.flipX = true;
+            transform.localScale = new Vector3(-1f, 1f, 1f);
         }
         else if (movementInput.x > 0)
         {
-            sr.flipX = false;
+            transform.localScale = new Vector3(1f, 1f, 1f);
         }
     }
 
