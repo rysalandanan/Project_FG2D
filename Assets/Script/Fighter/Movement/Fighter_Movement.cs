@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class Fighter_Movement : BaseMovement
+public class Fighter_Movement : GeneralMovement
 {
     //Reference Scripts//
     private Fighter_Attack fighter_Attack;
-    private Fighter_DamageHandler fighter_DamageHandler;
+    private Fighter_Health fighter_DamageHandler;
     private void Start()
     {
         fighter_Attack = GetComponent<Fighter_Attack>();
-        fighter_DamageHandler = GetComponent<Fighter_DamageHandler>();
+        fighter_DamageHandler = GetComponent<Fighter_Health>();
     }
     private void Update()
     {

@@ -15,7 +15,7 @@ public class Fighter_Attack : MonoBehaviour
     [SerializeField] private LayerMask targetLayer;
 
     //reference script//
-    private Fighter_DamageHandler damageHandler;
+    private Fighter_Health fighter_Health;
 
     //Flag//
     private bool isAttacking = false;
@@ -31,12 +31,12 @@ public class Fighter_Attack : MonoBehaviour
     }
     private void Start()
     {
-        damageHandler = GetComponent<Fighter_DamageHandler>();
+        fighter_Health = GetComponent<Fighter_Health>();
     }
 
     private void Update()
     {
-        if (!isAttacking && !damageHandler.IsHit())
+        if (!isAttacking && !fighter_Health.IsHit())
         {
             HandleAttackInput();
         }
@@ -99,14 +99,14 @@ public class Fighter_Attack : MonoBehaviour
         Vector2 raycastDirection = new Vector2(facingDirection, 0f);
         
         RaycastHit2D hit  = Physics2D.Raycast(raycastOrigin,raycastDirection,raycastDistance, targetLayer);
-        Debug.DrawLine(raycastOrigin, raycastOrigin + raycastDirection * raycastDistance, Color.red, 1f);
+        //Debug.DrawLine(raycastOrigin, raycastOrigin + raycastDirection * raycastDistance, Color.red, 1f);
         if (hit.collider !=null)
         {
-           AI_DamageHandler aI_DamangeHandler = hit.collider.gameObject.GetComponent<AI_DamageHandler>();
-           if(aI_DamangeHandler != null)
+           Enemy_Health enemy_Health = hit.collider.gameObject.GetComponent<Enemy_Health>();
+           if(enemy_Health != null)
            {
                 Debug.Log("You hit an enemy");
-                aI_DamangeHandler.TakeDamage(fighterDamage);
+                enemy_Health.TakeDamage(fighterDamage);
            }
         }
     }

@@ -7,7 +7,7 @@ public class Fighter_Animation : MonoBehaviour
     //reference scipts//
     private Fighter_Movement fighter_Movement;
     private Fighter_Attack fighter_Attack;
-    private Fighter_DamageHandler fighter_DamageHandler;
+    private Fighter_Health fighter_DamageHandler;
 
     private enum CharacterState
     {
@@ -23,7 +23,7 @@ public class Fighter_Animation : MonoBehaviour
         _animator = GetComponent<Animator>();
         fighter_Movement = GetComponent<Fighter_Movement>();
         fighter_Attack = GetComponent<Fighter_Attack>();
-        fighter_DamageHandler = GetComponent<Fighter_DamageHandler>();
+        fighter_DamageHandler = GetComponent<Fighter_Health>();
     }
 
     // Update is called once per frame

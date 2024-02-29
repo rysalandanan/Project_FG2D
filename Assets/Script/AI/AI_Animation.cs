@@ -10,14 +10,14 @@ public class AI_Animation : MonoBehaviour
     //Reference Script//
     private AI_Movement aI_Movement;
     private AI_Attack aI_Attack;
-    private AI_DamageHandler aI_DamageHandler;
+    private Enemy_Health aI_DamageHandler;
 
     void Start()
     {
         _animator =GetComponent<Animator>();
         aI_Movement = GetComponent<AI_Movement>();
         aI_Attack = GetComponent<AI_Attack>();
-        aI_DamageHandler = GetComponent<AI_DamageHandler>();
+        aI_DamageHandler = GetComponent<Enemy_Health>();
     }
 
     void Update()

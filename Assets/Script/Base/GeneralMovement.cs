@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class BaseMovement : MonoBehaviour
+public abstract class GeneralMovement : MonoBehaviour
 {
     [Header("Base Attributes")]
     [SerializeField] protected float MovementSpeed;

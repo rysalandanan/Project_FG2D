@@ -14,7 +14,7 @@ public class AI_Attack : MonoBehaviour
     [SerializeField] private LayerMask targetLayer;
 
     //Reference Scipt//
-    private AI_DamageHandler aI_damageHandler;
+    private Enemy_Health enemy_Health;
 
     //Flag//
     private bool isAttacking = false;
@@ -23,7 +23,7 @@ public class AI_Attack : MonoBehaviour
 
     private void Start()
     {
-        aI_damageHandler = GetComponent<AI_DamageHandler>();
+        enemy_Health = GetComponent<Enemy_Health>();
     }
     private enum AttackType
     {
@@ -31,7 +31,7 @@ public class AI_Attack : MonoBehaviour
     }
     public void AI_Punch()
     {
-        if(canAttackAgain)
+        if (canAttackAgain && !enemy_Health.IsHit())
         {
             StartCoroutine(AttackCoroutine(punchDuration, AttackType.Punch));
             PerformRaycast();
@@ -67,14 +67,14 @@ public class AI_Attack : MonoBehaviour
         float facingDirection = transform.localScale.x;
         Vector2 raycastDirection = new Vector2(facingDirection, 0f);
         RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, raycastDistance,targetLayer);
-        Debug.DrawLine(raycastOrigin, raycastOrigin + raycastDirection * raycastDistance, Color.red, 1f);
+        //Debug.DrawLine(raycastOrigin, raycastOrigin + raycastDirection * raycastDistance, Color.red, 1f);
         if (hit.collider != null)
         {
-            Fighter_DamageHandler fighter = hit.collider.gameObject.GetComponent<Fighter_DamageHandler>();
-            if (fighter != null)
+            Fighter_Health fighter_Health = hit.collider.gameObject.GetComponent<Fighter_Health>();
+            if (fighter_Health != null)
             {
                 Debug.Log("Enemy hit you");
-                fighter.TakeDamage(enemyDamage);
+                fighter_Health.TakeDamage(enemyDamage);
             }
         }
     }

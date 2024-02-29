@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class AI_Movement : BaseMovement
+public class AI_Movement : GeneralMovement
 {
     private Transform fighter;
     private AI_Attack aI_Attack;
-    private AI_DamageHandler aI_DamageHandler;
+    private Enemy_Health aI_DamageHandler;
     [SerializeField] private float stoppingDistance;
     private void Start()
     {
         fighter = GameObject.FindGameObjectWithTag("Player").transform;
         aI_Attack = GetComponent<AI_Attack>();
-        aI_DamageHandler = GetComponent<AI_DamageHandler>();
+        aI_DamageHandler = GetComponent<Enemy_Health>();
     }
 
    private void Update()
