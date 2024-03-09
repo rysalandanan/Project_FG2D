@@ -4,15 +4,15 @@ public class Fighter_Movement : GeneralMovement
 {
     //Reference Scripts//
     private Fighter_Attack fighter_Attack;
-    private Fighter_Health fighter_DamageHandler;
+    private Fighter_Health fighter_Health;
     private void Start()
     {
         fighter_Attack = GetComponent<Fighter_Attack>();
-        fighter_DamageHandler = GetComponent<Fighter_Health>();
+        fighter_Health = GetComponent<Fighter_Health>();
     }
     private void Update()
     {
-        if(!fighter_Attack.IsAttacking() && !fighter_DamageHandler.IsHit())
+        if(!fighter_Attack.IsAttacking() && !fighter_Health.IsHit())
         {
             Vector2 playerMovementInput = CalculateMovementInput();
             HandleMovement(playerMovementInput);

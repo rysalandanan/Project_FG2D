@@ -4,18 +4,18 @@ public class AI_Movement : GeneralMovement
 {
     private Transform fighter;
     private AI_Attack aI_Attack;
-    private Enemy_Health aI_DamageHandler;
+    private Enemy_Health enemy_Health;
     [SerializeField] private float stoppingDistance;
     private void Start()
     {
         fighter = GameObject.FindGameObjectWithTag("Player").transform;
         aI_Attack = GetComponent<AI_Attack>();
-        aI_DamageHandler = GetComponent<Enemy_Health>();
+        enemy_Health = GetComponent<Enemy_Health>();
     }
 
    private void Update()
    {
-        if(!aI_Attack.IsAttacking()&& !aI_DamageHandler.IsHit()&& !aI_DamageHandler.IsDead())
+        if(!aI_Attack.IsAttacking()&& !enemy_Health.IsHit()&& !enemy_Health.IsDead())
         {
             Vector2 AiMovementInput = CalculateMovementInput();
             HandleMovement(AiMovementInput);

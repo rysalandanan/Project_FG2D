@@ -1,16 +1,18 @@
 using System.Collections;
 using UnityEngine;
 
-public class GeneralHealth : MonoBehaviour, IDamageable
+public abstract class GeneralHealth : MonoBehaviour, IDamageable
 {
     [Header("General Health Attributes")]
     [SerializeField] protected int maxHealth;
     [SerializeField] protected float stunDuration;
     [SerializeField] protected float fadeDuration;
-    [SerializeField] protected float intensity;
+
+    [Header("Camera Shake Settings")]
+    [SerializeField] protected float shakeIntensity;
     [SerializeField] protected float shakeDuration;
 
-    protected bool isHit = false;
+    protected bool isHit = false; //for animation//
     protected bool isDead = false;
 
     [SerializeField] private AudioSource hitSFX;
@@ -26,11 +28,12 @@ public class GeneralHealth : MonoBehaviour, IDamageable
         currentHealth = maxHealth;
     }
     public virtual void TakeDamage(int damageAmount)
-    {
-        GetStun(stunDuration);
+    { 
         currentHealth -= damageAmount;
+        Debug.Log(currentHealth);
         PlayHitSFX();
         HandleDamageAftermath();
+        GetStun(stunDuration);
     }
     public virtual void GetStun(float stunDuration)
     {
@@ -38,9 +41,8 @@ public class GeneralHealth : MonoBehaviour, IDamageable
     }
     private IEnumerator Stun(float stunDuration)
     {
-        yield return new WaitForSeconds(0.2f);
         isHit = true;
-        ShakeCamera(intensity, shakeDuration);
+        ShakeCamera(shakeIntensity, shakeDuration);
         yield return new WaitForSeconds(stunDuration);
         isHit = false;
     }

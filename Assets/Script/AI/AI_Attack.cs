@@ -7,6 +7,7 @@ public class AI_Attack : MonoBehaviour
     [SerializeField] private float punchDuration;
     [SerializeField] private float cooldown;
     [SerializeField] private int enemyDamage;
+    [SerializeField] private float attackTravelTime;
 
     [Header("Raycast Settings")]
     [SerializeField] private float yOffSet;
@@ -17,8 +18,8 @@ public class AI_Attack : MonoBehaviour
     private Enemy_Health enemy_Health;
 
     //Flag//
-    private bool isAttacking = false;
-    private bool isPunching = false;
+    private bool isAttacking = false; //for movement//
+    private bool isPunching = false; //for animation//
     private bool canAttackAgain = true;
 
     private void Start()
@@ -34,7 +35,7 @@ public class AI_Attack : MonoBehaviour
         if (canAttackAgain && !enemy_Health.IsHit())
         {
             StartCoroutine(AttackCoroutine(punchDuration, AttackType.Punch));
-            PerformRaycast();
+            StartCoroutine(PerformRaycast());
         }    
     }
     private IEnumerator AttackCoroutine(float duration, AttackType attackType)
@@ -60,20 +61,27 @@ public class AI_Attack : MonoBehaviour
         yield return new WaitForSeconds(cooldown);
         canAttackAgain = true;
     }
-    private void PerformRaycast()
+    private IEnumerator PerformRaycast()
     {
         var TranPos = transform.position;
         Vector2 raycastOrigin = new Vector2(TranPos.x, TranPos.y + yOffSet);
         float facingDirection = transform.localScale.x;
         Vector2 raycastDirection = new Vector2(facingDirection, 0f);
-        RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, raycastDistance,targetLayer);
+        yield return new WaitForSeconds(attackTravelTime);
+        RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, raycastDistance, targetLayer);
         //Debug.DrawLine(raycastOrigin, raycastOrigin + raycastDirection * raycastDistance, Color.red, 1f);
         if (hit.collider != null)
         {
             Fighter_Health fighter_Health = hit.collider.gameObject.GetComponent<Fighter_Health>();
-            if (fighter_Health != null)
+            Fighter_Attack fighter_Attack = hit.collider.gameObject.GetComponent<Fighter_Attack>();
+            if (fighter_Attack.IsAttacking())
             {
-                Debug.Log("Enemy hit you");
+                //PARRY LOGIC HERE//
+                Debug.Log("PARRY");
+            }
+            else if (fighter_Health != null)
+            {
+                //Deliver Damage//
                 fighter_Health.TakeDamage(enemyDamage);
             }
         }
